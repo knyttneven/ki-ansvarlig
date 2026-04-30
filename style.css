@@ -464,6 +464,19 @@ body {
   border-color: var(--text-muted);
 }
 
+.back-button {
+  margin-bottom: 16px;
+  background: none;
+  border: none;
+  color: #2a5d8f;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.back-button:hover {
+  text-decoration: underline;
+}
+
 /* ============================================================
    RESULT SCREEN
    ============================================================ */

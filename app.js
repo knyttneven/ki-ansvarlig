@@ -824,6 +824,10 @@ function goToStart() {
   render();
 }
 
+function goBackToPortal() {
+  window.location.href = '../index.html';
+}
+
 /* ============================================================
    UTILITIES
    ============================================================ */
