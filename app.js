@@ -289,6 +289,8 @@ const deployerResults = {
       gdpr:   'GDPR art. 6 (rettslig grunnlag), art. 28 (databehandleravtale) og art. 32 (sikkerhetstiltak) er sentrale. Vurder om art. 35 (DPIA) er påkrevet basert på type og omfang av behandling.',
       school: 'Offentlige organer har særlige forpliktelser etter forvaltningsloven, opplæringsloven og personopplysningsloven. Ansvar for systemvalg og elevers rettigheter tilligger kommunen eller fylkeskommunen som behandlingsansvarlig.',
     },
+    regelverkNote: 'Bruken kan etter omstendighetene berøre krav i regelverket. Bør vurderes opp mot gjeldende regelverk som del av de gjenstående formelle avklaringene.',
+    juridiskNote:  'Dersom juridisk klassifisering av det aktuelle KI-systemet ikke er avklart, bør dette vurderes i KI-forordningsveiviseren.',
   },
 
   navigate: {
@@ -310,6 +312,8 @@ const deployerResults = {
       gdpr:   'GDPR art. 35 (DPIA) bør vurderes. Behandlingsansvar etter art. 4(7), databehandleravtale etter art. 28, og sikkerhetstiltak etter art. 32 må avklares formelt.',
       school: 'Kommuner og fylkeskommuner er behandlingsansvarlige for elevers personopplysninger. Ansvaret kan ikke delegeres bort uten formell avklaring og inngåelse av nødvendige avtaler.',
     },
+    regelverkNote: 'Bruken vil normalt forutsette nærmere vurdering opp mot gjeldende regelverk. Dette bør inngå i de avklaringene som er nødvendige for å gå videre.',
+    juridiskNote:  'Denne typen bruk vil normalt kunne kreve juridisk vurdering. Dersom juridisk klassifisering ikke er avklart, bør dette vurderes i KI-forordningsveiviseren.',
   },
 
   pilot: {
@@ -334,6 +338,8 @@ const deployerResults = {
       gdpr:   'En pilot fritar ikke fra GDPR-krav. Art. 35 (DPIA) kan være aktuell selv for den begrensede piloten. Behandlingsansvar og databehandleravtaler må avklares for piloten som sådan.',
       school: 'En pilot i offentlig sektor er et forpliktende styringsgrep der kommunen eller fylkeskommunen tar formelt eierskap og ansvar. Ledelsesforankring og skriftlig mandat forutsettes.',
     },
+    regelverkNote: 'Bruken kan etter omstendighetene berøre krav i regelverket. Piloten bør utformes slik at nødvendig rettslig grunnlag er på plass fra oppstart.',
+    juridiskNote:  'Dersom juridisk klassifisering av systemet ikke er avklart, bør dette vurderes i KI-forordningsveiviseren – som regel før pilot igangsettes.',
   },
 
   red: {
@@ -356,6 +362,8 @@ const deployerResults = {
       gdpr:   'Behandling av personopplysninger uten rettslig grunnlag, uten DPIA der det er påkrevet (art. 35), og uten sikkerhetstiltak (art. 32) er i strid med GDPR-prinsippene i art. 5. GDPR art. 5–9 og art. 35 er sentrale referanser.',
       school: 'Offentlige organer har et særlig ansvar for å sikre at systemer som berører barn og unge er forsvarlig utredet. Det er behandlingsansvarlig – normalt kommunen eller fylkeskommunen – som bærer dette ansvaret.',
     },
+    regelverkNote: 'Bruken vil normalt forutsette nærmere vurdering opp mot gjeldende regelverk. Regelverksavklaring bør inngå i det samlede avklaringsarbeidet.',
+    juridiskNote:  'Denne typen bruk vil normalt kunne kreve juridisk vurdering. Dersom juridisk klassifisering ikke er avklart, bør dette vurderes i KI-forordningsveiviseren. Juridisk vurdering bør inngå i avklaringsprosessen.',
   },
 };
 
@@ -476,18 +484,12 @@ function generateFlagExplanation(flow, f, resultKey) {
 function calculateLaererResult(f = collectFlags()) {
 
   // ── RED: specific harmful combinations ─────────────────────
-  // Cannot verify output AND output feeds directly into grading
-  if (f.has('no_control') && f.has('direct_grading')) return 'red';
-  // Cannot verify output AND students use without supervision
-  if (f.has('no_control') && f.has('students_alone')) return 'red';
-  // System profiles students AND no teacher supervision
+  // Cannot verify output (direct grading / unsupervised students / invasive system)
+  if (f.has('no_control') && (f.has('direct_grading') || f.has('students_alone') || f.has('invasive_system'))) return 'red';
+  // Invasive system with no teacher supervision
   if (f.has('invasive_system') && f.has('students_alone')) return 'red';
-  // System profiles students AND teacher cannot verify its output
-  if (f.has('invasive_system') && f.has('no_control')) return 'red';
-  // No competence AND output feeds directly into grading
-  if (f.has('no_competence') && f.has('direct_grading')) return 'red';
-  // No competence AND invasive/profiling system
-  if (f.has('no_competence') && f.has('invasive_system')) return 'red';
+  // No competence with high-stakes use (grading or invasive system)
+  if (f.has('no_competence') && (f.has('direct_grading') || f.has('invasive_system'))) return 'red';
   // Personal data on minors with no institutional framework
   if (
     (f.has('personal_data_extensive') || f.has('unknown_personal_data')) &&
@@ -532,16 +534,11 @@ function calculateDeployerResult(f = collectFlags()) {
   // No ownership AND no oversight — system has no accountability anchor
   if (f.has('no_responsibility') && f.has('no_human_control')) return 'red';
   // Extensive or unmapped personal data with no formal ownership
-  if (f.has('extensive_personal_data') && f.has('no_responsibility')) return 'red';
-  if (f.has('unknown_personal_data')   && f.has('no_responsibility')) return 'red';
-  // Automated student profiling/ranking without human oversight
-  if (f.has('profiles_students') && f.has('no_human_control')) return 'red';
-  // Automated student profiling/ranking without any regulatory review
-  if (f.has('profiles_students') && f.has('no_regulatory')) return 'red';
-  // Extensive sensitive data with no regulatory check
-  if (f.has('extensive_personal_data') && f.has('no_regulatory')) return 'red';
-  // Extensive sensitive data with no human oversight
-  if (f.has('extensive_personal_data') && f.has('no_human_control')) return 'red';
+  if ((f.has('extensive_personal_data') || f.has('unknown_personal_data')) && f.has('no_responsibility')) return 'red';
+  // Automated student profiling/ranking without oversight or regulatory review
+  if (f.has('profiles_students') && (f.has('no_human_control') || f.has('no_regulatory'))) return 'red';
+  // Extensive sensitive data without oversight or regulatory review
+  if (f.has('extensive_personal_data') && (f.has('no_human_control') || f.has('no_regulatory'))) return 'red';
 
   // ── PILOT: high-ambition scale with unresolved governance ───
   // Large-scale deployment before governance is fully ready → limit scope first
@@ -709,6 +706,18 @@ function renderResult() {
         <p class="result-trigger-text">${escHtml(trigger)}</p>
       </div>` : '';
 
+  const regelverkHtml = r.regelverkNote ? `
+      <div class="result-section">
+        <div class="result-section-heading">Forhold til regelverk</div>
+        <p>${escHtml(r.regelverkNote)}</p>
+      </div>` : '';
+
+  const juridiskHtml = r.juridiskNote ? `
+      <div class="result-section">
+        <div class="result-section-heading">Forhold til juridisk vurdering</div>
+        <p>${escHtml(r.juridiskNote)}</p>
+      </div>` : '';
+
   app.innerHTML = `
     <div class="card">
       <div class="result-badge ${r.badge}">
@@ -750,6 +759,10 @@ function renderResult() {
           </div>
         </div>
       </div>
+
+      ${regelverkHtml}
+
+      ${juridiskHtml}
 
       <div class="result-notice">
         <strong>Merk:</strong> Dette er et vurderingsgrunnlag – ikke en juridisk vurdering, godkjenning

@@ -23,17 +23,30 @@ Denne veiviseren stiller de riktige spørsmålene slik at **du** og dine kollega
 1. **Lærerveiviser** — For lærere som vurderer pedagogisk bruk av KI
    - Fokuserer på læringsmål og elevinteraksjon
    - Handler om konkrete valg i undervisningen
+   - Brukes av læreren alene
    
-2. **Deployerveiviser** — For skoleleder, IKT-ansvarlige, fylkeskommune
-   - Fokuserer på styringsansvar og organisatoriske valg
-   - Handler om systemtilgang, data og pilot
+2. **Deployerveiviser** — For skoleledere, IKT-ansvarlige, fylkeskommune, *og jurister*
+   - Fokuserer på styringsansvar, infrastruktur og organisatoriske valg
+   - Handler om systemtilgang, databehandling, lisensiering og pilot-strategi
+   - Brukes i *samarbeid* mellom IT, administrasjon og juridisk avdeling
+   - Stiller spørsmål som juridiske vurderingsgrunnlag trenger svar på
+
+### Forskjell fra KI-forordningen-veiviseren
+
+Dette verktøyet er **ikke** det samme som [KI-forordningen-veiviseren](https://barx10.github.io/ki_forordninga/#hjem).
+
+**KI-forordningen-veiviseren** fokuserer på juridisk klassifisering av risiko etter EU's KI-forordning (risiko-nivå → juridisk klassifisering).
+
+**Ansvarlig KI i skolen** fokuserer på pedagogisk og organisatorisk vurdering (hva skal vi gjøre, hvem skal gjøre det, hvordan skal vi gjøre det ansvarlelig).
+
+De to verktøyene utfyller hverandre — juridisk vurdering av regelverk (forordningen) kombineres med praktisk vurdering av implementering (denne veiviseren).
 
 ## Viktige premisser
 
 - ✅ Menneskelig beslutning er alltid siste ledd
 - ✅ Pilot er et styringsgrep, ikke et risikonivå
 - ✅ Lærer er aldri deployer (separate roller)
-- ✅ KI-kompetanse er en forutsetning, ikke et kurskrav
+- ✅ **KI-kompetanse er en forutsetning, ikke et kurskrav** — Veiviseren forutsetter at brukerne har grunnleggende forståelse av hva KI er, men du trenger *ikke* være ekspert for å bruke den
 - ❌ Ikke juridisk rådgivning
 - ❌ Ikke ROS/DPIA-verktøy
 - ❌ Ingen risikoscore eller juridisk klassifisering

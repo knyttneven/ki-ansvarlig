@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Implementering og drift – KI-veiledning</title>
+  <link rel="stylesheet" href="implementering.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <a href="../index.html" class="back-to-portal">← Tilbake til oversikten</a>
+      <div class="header-content">
+        <span class="tool-badge">Etter beslutning</span>
+        <h1 class="site-title">Implementering og drift</h1>
+        <p class="site-subtitle">
+          Gjennomføring og styring – ikke vurdering av om KI skal brukes
+        </p>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" id="main">
+
+    <div id="app">
+
+      <!-- Intro screen -->
+      <div id="screen-intro" class="screen screen--intro" role="region" aria-label="Innledning">
+        <div class="intro-card">
+          <p class="intro-text">
+            Dette verktøyet hjelper deg å vurdere om forutsetningene for ansvarlig innføring og drift av et KI-system er på plass.
+            Det forutsetter at en tidligere vurdering – for eksempel i «Ansvarlig KI i skolen» – er gjennomført.
+          </p>
+          <p class="intro-text">
+            Verktøyet tar ingen beslutninger. Det gir ikke godkjenning og erstatter ikke juridisk, personvernfaglig eller organisatorisk kompetanse.
+            Resultatet er et vurderingsgrunnlag for ansvarlig ledelse.
+          </p>
+          <p class="intro-text intro-text--sections">
+            Vurderingen er delt i tre deler: <strong>Klar for bruk</strong>, <strong>Innføring</strong> og <strong>Oppfølging</strong>.
+          </p>
+          <button class="btn-primary" id="btn-start" type="button">Start vurdering</button>
+        </div>
+      </div>
+
+      <!-- Wizard screen -->
+      <div id="screen-wizard" class="screen screen--wizard hidden" role="region" aria-label="Spørsmål">
+
+        <div class="progress-area" aria-hidden="true">
+          <div class="progress-top">
+            <span class="progress-section" id="progress-section"></span>
+            <span class="progress-label" id="progress-label"></span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+        </div>
+
+        <div class="question-card" id="question-card" tabindex="-1">
+          <p class="question-theme" id="question-theme"></p>
+          <h2 class="question-text" id="question-text"></h2>
+          <div class="answers" id="answers" role="list"></div>
+          <div class="nav-row">
+            <button class="btn-back" id="btn-back" type="button">← Forrige spørsmål</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Result screen -->
+      <div id="screen-result" class="screen screen--result hidden" role="region" aria-label="Resultat" aria-live="polite">
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Verktøyet gir vurderingsgrunnlag – ikke beslutninger. Menneskelig vurdering er alltid siste ledd.</p>
+    </div>
+  </footer>
+
+  <script src="implementering.js"></script>
+
+</body>
+</html>
